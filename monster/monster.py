@@ -161,8 +161,6 @@ class Monster():
 		}
 		return job_dict
 
-	@sleep_and_retry
-	@limits( calls=1, period=api_throttle_secs )
 	def search( self, quantity=25, **kwargs ):
 		''' Search Monster.com with the given filters and yield job links.
 		
