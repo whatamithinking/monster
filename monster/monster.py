@@ -164,7 +164,19 @@ class Monster():
 	@sleep_and_retry
 	@limits( calls=1, period=api_throttle_secs )
 	def search( self, quantity=25, **kwargs ):
-
+		''' Search Monster.com with the given filters and yield job links.
+		
+		Args:
+			quantity (int): The max number of results to return.
+			kwargs (dict): Dictionary of filters, such as keywords, 
+				type (full_time,part_time), and posteddaysago.
+				
+		Returns:
+			SearchResult (namedtuple): generator of named tuples, each
+				containing an ApplyLink and a DetailsLink. The ApplyLink,
+				when followed, will apply for the job automatically. The 
+				Details link will return json data about the job.
+		'''
 		search_url = SITE['search']['root']
 		
 		# HANDLE SPECIAL CASE OF JOB TYPE, WHICH MUST PRECEED QUERY
