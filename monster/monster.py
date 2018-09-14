@@ -203,12 +203,18 @@ class Monster():
 					search_url += \
 						'&{0}'.format(search_format.format(urllib.parse.quote_plus(search_value)))
 
+		@sleep_and_retry
+		@limits( calls=1, period=self.api_throttle_secs )
+		def getPage( page ):
+			paged_search_url = search_url + '&page=' + str( page )
+			search_page = self._session.get( paged_search_url )
+			return search_page
+		
 		# GET AND PROCESS RETURNED JSON
 		quantity_returned = 0
 		page = 1
 		while quantity_returned < quantity:
-			paged_search_url = search_url + '&page=' + str( page )
-			search_page = self._session.get( paged_search_url )
+			search_page = getPage( page )
 			if search_page.status_code != 200:
 				break
 			search_json = search_page.json()
