@@ -1,62 +1,49 @@
 
 
 <p align="left">
-<img src="https://github.com/ConnorSMaynes/ziprecruiter/blob/master/ziprecruiter/static/logo.png" alt="ZipRecruiter Unofficial API" >
+<img src="https://github.com/ConnorSMaynes/monster/blob/master/monster/logo.png" alt="Monster.com Unofficial API" >
 </p>
 
-A simple unofficial api for ziprecruiter.
+A simple unofficial api for Monster.com job board.
 
-<p align="left">
-<img src="https://github.com/ConnorSMaynes/ziprecruiter/blob/master/ziprecruiter/static/batteries.png", alt="Batteries Included - Selenium - Chrome Webdriver" width=30, height=30>
-      Selenium Batteries Included - Chrome Webdriver
-</p>
+Completely headless. Everything runs on python requests.
 
 ## Methods
 
-- `login` : Login to ZipRecruiter with the provided credentials. ZipRecruiter is protected by No Captcha ReCaptcha, so if this pops up and login cannot proceed the selenium browser will restart and display itself so you can solve the captcha. Selenium is ONLY used for login, because of the captcha problem, everything else is nice and fast through requests.
+- `login` : Login to Monster.com with your email and password.
 - `search` : search for jobs. returns a list of search results named tuples with ApplyLink ( quick apply job link ) and DetailsLink ( link to job desciption and other job details ). generator. The following filters are supported:
   - keywords
   - posted x days ago
-  - salary
   - type ( full-time, internship, temporary )
-- `uploadResume` : Upload the provided resume to ziprecruiter to replace the existing resume in the account.
 - `apply` : apply to the job at the given url ( ApplyLink ) returned from `search`
 - `batchApply` : apply to a bunch of jobs at once. progress bar.
-- `getApplied` : get json/dict of data about jobs applied to
-- `getJobDetails` : get details on a given job from the DetailsLink of the search result returned from `search`
+- `getJobDetails` : get details on a given job from the DetailsLink of the search result returned from `search`. This method will also accept a job id or the apply url and will lookup the job details.
 
 ## Installation
 
 ```bash
-pip install git+git://github.com/ConnorSMaynes/ziprecruiter
+pip install git+git://github.com/ConnorSMaynes/monster
 ```
 
 ## Usage
 
 ```python
-from ziprecruiter import ZipRecruiter
+from monster import Monster
 
 # LOGIN
-z = ZipRecruiter()
-z.login( USERNAME, PASSWORD )
+m = Monster()
+if m.login( USERNAME, PASSWORD ):
 
-# UPLOAD LATEST RESUME
-z.uploadResume( FilePath=RESUME_FILE_PATH )
+      # BATCH APPLY TO JOBS
+      z.batchApply( m.search( quantity=5, keywords='developer' ) ) # apply to a bunch of jobs with progress bar.
 
-# BATCH APPLY TO JOBS
-Jobs = list( z.search( Quantity=5, keywords='developer' ) )
-z.batchApply( Jobs )                                        # apply to a bunch of jobs with progress bar.
-
-# GET DETAILS ON LAST FEW JOBS APPLIED TO
-LastJobsAppliedTo = z.getApplied( 5 )                       # get last 5 jobs applied to
-
-# APPLY TO JOBS AND GET DETAILS
-Jobs = z.search( Quantity=5, keywords='developer' )
-for Job in Jobs:                                            # apply to jobs and do some other stuff
-    JobDetails = z.getJobDetails( Job.DetailsLink )         # note how we access the DetailsLink and ApplyLink
-    AppResult = z.apply( Job.ApplyLink )
-    if AppResult:
-        print( JobDetails )
+      # APPLY TO JOBS AND GET DETAILS
+      Jobs = z.search( quantity=5, keywords='developer' )
+      for Job in Jobs:                                            # apply to jobs and do some other stuff
+          JobDetails = z.getJobDetails( Job )                       
+          AppResult = z.apply( Job )
+          if AppResult:
+              print( JobDetails )
 ```
 
 ## Similar Projects
