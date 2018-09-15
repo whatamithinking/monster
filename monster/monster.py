@@ -25,6 +25,27 @@ SITE = {
 	}
 }
 
+QUICK_APPLY_KEYWORDS = [
+	'ApplyOnline'
+	,'ApplyWithMonster'
+]
+
+RECRUITING_AGENCY_KEYWORDS = [
+	'staffing'
+	,'consulting'
+	,'consultants'
+	,'recruiting'
+	,'recruiter'
+	,'recruitment'
+	,'group'
+	,'employment'
+	,'sourcing'
+	,'resourcing'
+	,'talent'
+	,'workforce planning'
+	,'force'
+]
+
 SearchResult = namedtuple( 'SearchResult', "ApplyLink, DetailsLink" )
 
 class Monster():
@@ -161,7 +182,7 @@ class Monster():
 		}
 		return job_dict
 
-	def search( self, quantity=25, **kwargs ):
+	def search( self, quantity=25, filter_out_recruiting_agencies=True, **kwargs ):
 		''' Search Monster.com with the given filters and yield job links.
 		
 		Args:
@@ -195,7 +216,7 @@ class Monster():
 					options = SITE['search'][search_field]['options']
 					if search_value in options:
 						options_value = options[search_value]
-						search_url += '&' + urllib.parse.quote_plus( options_value )
+						search_url += '+' + urllib.parse.quote_plus( options_value )
 				else:
 					search_format = SITE['search'][search_field]
 					search_url += \
@@ -217,15 +238,19 @@ class Monster():
 				break
 			search_json = search_page.json()
 			for app_dict in search_json:
-				if app_dict['JobID'] != 0 and app_dict['ApplyType'] != None:
-					if app_dict['IsAppliedJob'] == False:
-						if any( x in app_dict['ApplyType'] for x in ( 'ApplyOnline', 'ApplyWithMonster' ) ):
-							job_id = app_dict['JobID']
-							apply_url = SITE['speedapply'].format( job_id )
-							details_url = SITE['job'].format( job_id )
-							search_result = SearchResult( apply_url, details_url )
-							quantity_returned += 1
-							yield search_result
+				if app_dict['JobID'] != 0 and app_dict['ApplyType'] != None:			# filter jobs that are missing data / poorly formatted
+					if app_dict['IsAppliedJob'] == False:								# filter jobs already applied to
+						if any( x in app_dict['ApplyType'] \
+							for x in QUICK_APPLY_KEYWORDS ):							# filter to include quick apply jobs only
+							if not any( x in app_dict['Company']['Name'] \
+								for x in RECRUITING_AGENCY_KEYWORDS ) or
+								not filter_out_recruiting_agencies:						# filter jobs from recruiting agencies
+								job_id = app_dict['JobID']
+								apply_url = SITE['speedapply'].format( job_id )
+								details_url = SITE['job'].format( job_id )
+								search_result = SearchResult( apply_url, details_url )
+								quantity_returned += 1
+								yield search_result
 				if quantity_returned >= quantity:
 					break
 			page += 1
