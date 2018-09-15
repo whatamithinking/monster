@@ -242,8 +242,8 @@ class Monster():
 					if app_dict['IsAppliedJob'] == False:								# filter jobs already applied to
 						if any( x in app_dict['ApplyType'] \
 							for x in QUICK_APPLY_KEYWORDS ):							# filter to include quick apply jobs only
-							if not any( x in app_dict['Company']['Name'] \
-								for x in RECRUITING_AGENCY_KEYWORDS ) or
+							if not any( x.lower() in app_dict['Company']['Name'].lower() \
+								for x in RECRUITING_AGENCY_KEYWORDS ) or \
 								not filter_out_recruiting_agencies:						# filter jobs from recruiting agencies
 								job_id = app_dict['JobID']
 								apply_url = SITE['speedapply'].format( job_id )
