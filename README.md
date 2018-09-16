@@ -54,4 +54,4 @@ This project was inspired by others:
 
 ## License
 
-Copyright © 2018, [ConnorSMaynes](https://github.com/ConnorSMaynes). Released under the [MIT](https://github.com/ConnorSMaynes/ziprecruiter/blob/master/LICENSE).
+Copyright © 2018, [ConnorSMaynes](https://github.com/ConnorSMaynes). Released under the [MIT](https://github.com/ConnorSMaynes/monster/blob/master/LICENSE.txt).
