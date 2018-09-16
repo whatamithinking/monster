@@ -13,7 +13,7 @@ SITE = {
 	,'speedapply'		:	'https://job-openings.monster.com/v2/job/speedapply?jobid={0}'
 	,'job'				:	'https://job-openings.monster.com/v2/job/pure-json-view?jobid={0}'
 	,'search'			:	{
-		'root'			:	'https://www.monster.com/jobs/search/pagination/{type}?isDynamicPage=true&isMKPagination=true'
+		'root'			:	''
 		,'keywords'		:	'q={0}'
 		,'posteddaysago':	'tm={0}'
 		,'type'			:	{
@@ -79,7 +79,8 @@ class Monster():
 			if apply_result.json()['success'] == True:
 				return True
 			else:
-				print(apply_result.json())
+				print( job_link )
+				print( apply_result.json() )
 		return False
 
 	def batchApply( self, job_links ):
