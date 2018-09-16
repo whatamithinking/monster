@@ -13,7 +13,7 @@ SITE = {
 	,'speedapply'		:	'https://job-openings.monster.com/v2/job/speedapply?jobid={0}'
 	,'job'				:	'https://job-openings.monster.com/v2/job/pure-json-view?jobid={0}'
 	,'search'			:	{
-		'root'			:	''
+		'root'			:	'https://www.monster.com/jobs/search/pagination/{type}?isDynamicPage=true&isMKPagination=true'
 		,'keywords'		:	'q={0}'
 		,'posteddaysago':	'tm={0}'
 		,'type'			:	{
