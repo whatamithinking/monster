@@ -44,6 +44,7 @@ RECRUITING_AGENCY_KEYWORDS = [
 	,'talent'
 	,'workforce planning'
 	,'force'
+	,'hire'
 ]
 
 SearchResult = namedtuple( 'SearchResult', "ApplyLink, DetailsLink" )
