@@ -240,21 +240,21 @@ class Monster():
 				break
 			search_json = search_page.json()
 			for app_dict in search_json:
-				if app_dict['JobID'] != 0 and app_dict['ApplyType'] != None:			# filter jobs that are missing data / poorly formatted
-					if app_dict['IsAppliedJob'] == False:								# filter jobs already applied to
+				if all( key in app_dict for key in ( 'MusangKingId', 'ApplyType' ) ):
+					if app_dict['MusangKingId'] != 0 and app_dict['ApplyType'] != None:			# filter jobs that are missing data / poorly formatted
 						if any( x in app_dict['ApplyType'] \
 							for x in QUICK_APPLY_KEYWORDS ):							# filter to include quick apply jobs only
 							if not any( x.lower() in app_dict['Company']['Name'].lower() \
 								for x in RECRUITING_AGENCY_KEYWORDS ) or \
 								not filter_out_recruiting_agencies:						# filter jobs from recruiting agencies
-								job_id = app_dict['JobID']
+								job_id = app_dict['MusangKingId']
 								apply_url = SITE['speedapply'].format( job_id )
 								details_url = SITE['job'].format( job_id )
 								search_result = SearchResult( apply_url, details_url )
 								quantity_returned += 1
 								yield search_result
-				if quantity_returned >= quantity:
-					break
+					if quantity_returned >= quantity:
+						break
 			page += 1
 
 if __name__ == '__main__':
