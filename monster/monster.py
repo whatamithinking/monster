@@ -16,6 +16,7 @@ SITE = {
 		'root'			:	'https://www.monster.com/jobs/search/pagination/{type}?isDynamicPage=true&isMKPagination=true'
 		,'keywords'		:	'q={0}'
 		,'posteddaysago':	'tm={0}'
+		,'company'		: 	'cn={0}'
 		,'type'			:	{
 			'options'	:	{
 				'part_time'	:	'Part-Time'
