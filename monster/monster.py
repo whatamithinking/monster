@@ -54,6 +54,7 @@ class Monster():
 	api_throttle_secs = 3
 
 	def __init__( self ):
+		self.verbose = False
 		self._session = Session(
 				webdriver_path=''
 				,browser='chrome'
@@ -80,7 +81,7 @@ class Monster():
 		if apply_result.status_code == 200:
 			if apply_result.json()['success'] == True:
 				return True
-			else:
+			elif self.verbose:
 				print( job_link )
 				print( apply_result.json() )
 		return False
